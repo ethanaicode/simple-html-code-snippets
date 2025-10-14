@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>页面跳转中...</title>
+    <style>
+      /* 1. 移除冗余动画（保留核心视觉反馈，减少CPU消耗） */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+      :root {
+        --primary: #165dff;
+        --line1: #3b82f6;
+        --line2: #10b981;
+        --line3: #8b5cf6;
+        --gray-100: #f3f4f6;
+        --gray-500: #6b7280;
+        --gray-800: #1f2937;
+        --red-500: #ef4444;
+      }
+      /* 2. 简化动画（仅保留必要的视觉提示，减少关键帧计算） */
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+      .pulse-slow {
+        animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      .container {
+        max-width: 320px;
+        width: 100%;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        padding: 24px;
+      }
+      .icon-container {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .icon-wrapper {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background-color: rgba(22, 93, 255, 0.1);
+        color: var(--primary);
+      }
+      .icon {
+        font-size: 24px;
+      }
+      .title {
+        font-size: clamp(1.4rem, 3vw, 1.6rem);
+        font-weight: 700;
+        color: var(--gray-800);
+        text-align: center;
+        margin-bottom: 8px;
+      }
+      .message {
+        color: var(--gray-500);
+        text-align: center;
+        margin-bottom: 24px;
+      }
+      .progress-container {
+        width: 100%;
+        height: 4px;
+        background-color: var(--gray-100);
+        border-radius: 9999px;
+        margin-bottom: 24px;
+        overflow: hidden;
+      }
+      .progress-bar {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--primary) 0%,
+          var(--line1) 100%
+        );
+        width: 0;
+        /* 3. 进度条用CSS动画（比JS定时器更高效） */
+        animation: progress 3s linear forwards;
+      }
+      @keyframes progress {
+        to {
+          width: 100%;
+        }
+      }
+      .lines-container {
+        text-align: center;
+      }
+      .lines-label {
+        color: var(--gray-500);
+        margin-bottom: 12px;
+        font-size: 14px;
+      }
+      .lines-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+      .line-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        text-decoration: none;
+        font-size: 14px;
+        transition: all 200ms ease;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      }
+      .line1 {
+        background-color: var(--line1);
+      }
+      .line2 {
+        background-color: var(--line2);
+      }
+      .line3 {
+        background-color: var(--line3);
+      }
+      .error-message {
+        color: var(--red-500);
+        text-align: center;
+        margin-top: 16px;
+        font-size: 14px;
+        display: none;
+      }
+      .footer {
+        color: var(--gray-500);
+        font-size: 12px;
+        margin-top: 24px;
+        text-align: center;
+      }
+      .hidden-form {
+        display: none;
+      }
+      .icon-exchange::before {
+        content: "↔";
+      }
+    </style>
+    <!-- 4. 移除CSS与HTML分离，减少HTTP请求（跳转页优先保证加载速度） -->
+  </head>
+  <body>
+    <div class="container">
+      <div class="icon-container">
+        <div class="icon-wrapper pulse-slow">
+          <span class="icon icon-exchange"></span>
+        </div>
+      </div>
+      <h1 class="title">页面跳转中</h1>
+      <p class="message">正在为您引导至目标页面，请稍候...</p>
+      <div class="progress-container">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+      <div class="lines-container">
+        <p class="lines-label">如果长时间未跳转，请选择以下线路</p>
+        <div class="lines-grid">
+          <a id="line1Link" href="#" class="line-btn line1">线路1</a>
+          <a id="line2Link" href="#" class="line-btn line2">线路2</a>
+          <a id="line3Link" href="#" class="line-btn line3">线路3</a>
+        </div>
+      </div>
+      <p id="errorMessage" class="error-message"></p>
+    </div>
+    <p class="footer">跳转过程不会收集您的任何信息</p>
+    <form id="redirectForm" action="" method="get" class="hidden-form">
+      <input type="submit" value="跳转" />
+    </form>
+
+    <!-- 5. JS放在body末尾（避免阻塞DOM解析），且无外部依赖 -->
+    <script>
+      // 核心优化：简化配置+提前初始化，减少代码执行耗时
+      const config = {
+        urlsFile: "./ad/urls.txt",
+        // 6. 缩短基础延迟（移动/桌面端延迟统一降低，优先跳转）
+        baseDelay: 100,
+        lineCount: 3,
+        xhrTimeout: 800, // 7. 缩短XHR超时时间，避免等待过久
+        fallbackUrl: "https://example.com/", // 8. 新增降级地址，防止URL文件加载失败
+      };
+
+      const state = { targetUrls: [], lineUrls: [] };
+      const elements = {
+        line1Link: document.getElementById("line1Link"),
+        line2Link: document.getElementById("line2Link"),
+        line3Link: document.getElementById("line3Link"),
+        redirectForm: document.getElementById("redirectForm"),
+        errorMessage: document.getElementById("errorMessage"),
+      };
+
+      // 9. 工具函数精简（移除冗余逻辑，只保留核心功能）
+      const utils = {
+        isValidUrl: (url) => {
+          try {
+            new URL(url);
+            return true;
+          } catch (e) {
+            return false;
+          }
+        },
+        getRandomUrl: (urls) => urls[Math.floor(Math.random() * urls.length)],
+        getUniqueRandomUrls: (urls, count) => {
+          if (urls.length <= count)
+            return [...urls, ...urls.slice(0, count - urls.length)];
+          const shuffled = [...urls];
+          for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          }
+          return shuffled.slice(0, count);
+        },
+        isMobile: () => /mobile/i.test(navigator.userAgent),
+      };
+
+      // 10. 跳转逻辑优化（移除冗余方法，只保留最高效的2种）
+      function redirect(url) {
+        if (!url) url = config.fallbackUrl; // 降级处理
+        // 优先使用replace（不增加历史记录，跳转更快）
+        window.location.replace(url);
+        // 备用方案（防止replace被拦截）
+        setTimeout(() => (window.location.href = url), 50);
+      }
+
+      // 11. 线路初始化简化（减少DOM操作次数）
+      function initLineLinks() {
+        elements.line1Link.href = state.lineUrls[0] || config.fallbackUrl;
+        elements.line2Link.href = state.lineUrls[1] || config.fallbackUrl;
+        elements.line3Link.href = state.lineUrls[2] || config.fallbackUrl;
+        elements.redirectForm.action = state.lineUrls[0] || config.fallbackUrl;
+      }
+
+      // 12. XHR请求优化（使用fetch API，性能优于XHR，且代码更简洁）
+      async function readUrlsFromFile() {
+        try {
+          const response = await fetch(config.urlsFile, {
+            method: "GET",
+            timeout: config.xhrTimeout,
+            cache: "no-store", // 13. 禁止缓存，确保获取最新URL
+          });
+          if (!response.ok) throw new Error(`状态码: ${response.status}`);
+          const text = await response.text();
+          const validUrls = text
+            .split("\n")
+            .map((line) => line.trim())
+            .filter((line) => line && utils.isValidUrl(line));
+          return validUrls.length ? validUrls : [config.fallbackUrl];
+        } catch (error) {
+          console.error("URL文件读取失败:", error);
+          return [config.fallbackUrl]; // 14. 读取失败直接返回降级地址
+        }
+      }
+
+      // 15. 初始化流程并行化（URL读取与延迟跳转并行执行）
+      async function init() {
+        // 并行执行：读取URL + 延迟跳转，减少总耗时
+        const urlsPromise = readUrlsFromFile();
+        // 延迟跳转（基础延迟，不等待URL读取完成）
+        setTimeout(async () => {
+          state.targetUrls = await urlsPromise;
+          state.lineUrls = utils.getUniqueRandomUrls(
+            state.targetUrls,
+            config.lineCount
+          );
+          initLineLinks();
+          redirect(utils.getRandomUrl(state.lineUrls));
+        }, config.baseDelay);
+      }
+
+      // 16. 立即执行初始化（无需等待DOMContentLoaded，body已解析完成）
+      init();
+    </script>
+  </body>
+</html>
