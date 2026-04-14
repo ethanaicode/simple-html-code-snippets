@@ -1,0 +1,373 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no,address=no,email=no" />
+    <meta name="mobileOptimized" content="width" />
+    <meta name="handleldFriendly" content="true" />
+    <meta name="applicable-device" content="pc,mobile" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="dns-prefetch" href="//picasso-static.xiaohongshu.com" />
+    <link
+      rel="preconnect"
+      href="//picasso-static.xiaohongshu.com"
+      crossorigin
+    />
+    <link
+      rel="shortcut icon"
+      href="https://fe-video-qc.xhscdn.com/fe-platform/ed8fe781ce9e16c1bfac2cd962f0721edabe2e49.ico"
+    />
+    <title>打开小红书</title>
+    <meta name="description" content="在小红书，和最会生活的人做朋友" />
+    <meta
+      name="keywords"
+      content="小红书，小红书购物笔记，境外时尚达人买手购物晒货社区，福利社"
+    />
+    <script>
+      function handleJSONPResponse(e) {
+        var n = document.getElementById("version"),
+          t = document.getElementById("updateDate");
+        n &&
+          t &&
+          e.updateTime &&
+          e.version &&
+          e.installUrl &&
+          ((n.textContent = e.version),
+          (t.textContent = e.updateTime),
+          (window.ANDROID_INSTALL_URL = e.installUrl));
+      }
+      function sendJSONPRequest() {
+        var e = document.createElement("script");
+        ((e.src =
+          "//www.hongshuxiao.com/ranchi/api/apk?callback=handleJSONPResponse"),
+          document.body.appendChild(e));
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        sendJSONPRequest();
+      });
+    </script>
+    <script
+      src="./redjs/runtime-main.7575880.js"
+      defer="defer"
+      crossorigin
+      xhs-integrity=""
+    ></script>
+    <script
+      src="./redjs/vendor-main.840ef72.js"
+      defer="defer"
+      crossorigin
+      xhs-integrity=""
+    ></script>
+    <script
+      src="./redjs/main.f84ed73.js"
+      defer="defer"
+      crossorigin
+      xhs-integrity=""
+    ></script>
+    <style type="text/css">
+      img,
+      legend {
+        border: 0;
+      }
+      legend,
+      td,
+      th {
+        padding: 0;
+      }
+      html {
+        font-family:
+          -apple-system,
+          SF UI Text,
+          PingFang SC,
+          Hiragino Sans GB,
+          Microsoft YaHei,
+          WenQuanYi Micro Hei,
+          Helvetica Neue,
+          Helvetica,
+          Arial,
+          sans-serif;
+        -webkit-text-size-adjust: 100%;
+      }
+      body,
+      html {
+        background-color: #fff;
+      }
+      body {
+        margin: 0;
+      }
+      article,
+      aside,
+      details,
+      figcaption,
+      figure,
+      footer,
+      header,
+      main,
+      menu,
+      nav,
+      section,
+      summary {
+        display: block;
+      }
+      audio,
+      canvas,
+      progress,
+      video {
+        display: inline-block;
+        vertical-align: baseline;
+      }
+      audio:not([controls]) {
+        display: none;
+        height: 0;
+      }
+      [hidden],
+      template {
+        display: none;
+      }
+      a {
+        background-color: transparent;
+      }
+      a:active,
+      a:hover {
+        outline: 0;
+      }
+      abbr[title] {
+        border-bottom: 1px dotted;
+      }
+      b,
+      optgroup,
+      strong {
+        font-weight: 700;
+      }
+      dfn {
+        font-style: italic;
+      }
+      h1 {
+        font-size: 2em;
+        margin: 0.67em 0;
+      }
+      mark {
+        background: #ff0;
+        color: #000;
+      }
+      small {
+        font-size: 80%;
+      }
+      sub,
+      sup {
+        font-size: 75%;
+        line-height: 0;
+        vertical-align: baseline;
+      }
+      sup {
+        top: -0.5em;
+      }
+      sub {
+        bottom: -0.25em;
+      }
+      img {
+        display: block;
+      }
+      svg:not(:root) {
+        overflow: hidden;
+      }
+      figure {
+        margin: 1em 40px;
+      }
+      hr {
+        box-sizing: content-box;
+        height: 0;
+      }
+      pre,
+      textarea {
+        overflow: auto;
+      }
+      code,
+      kbd,
+      pre,
+      samp {
+        font-family: monospace, monospace;
+        font-size: 1em;
+      }
+      button,
+      input,
+      optgroup,
+      select,
+      textarea {
+        color: inherit;
+        font: inherit;
+        margin: 0;
+      }
+      button {
+        overflow: visible;
+      }
+      button,
+      select {
+        text-transform: none;
+      }
+      button,
+      html input[type="button"],
+      input[type="reset"],
+      input[type="submit"] {
+        -webkit-appearance: button;
+        cursor: pointer;
+      }
+      button[disabled],
+      html input[disabled] {
+        cursor: default;
+      }
+      button::-moz-focus-inner,
+      input::-moz-focus-inner {
+        border: 0;
+        padding: 0;
+      }
+      input {
+        line-height: normal;
+      }
+      input[type="checkbox"],
+      input[type="radio"] {
+        box-sizing: border-box;
+        padding: 0;
+      }
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        height: auto;
+      }
+      input[type="search"] {
+        -webkit-appearance: textfield;
+        box-sizing: content-box;
+      }
+      input[type="search"]::-webkit-search-cancel-button,
+      input[type="search"]::-webkit-search-decoration {
+        -webkit-appearance: none;
+      }
+      fieldset {
+        border: 1px solid silver;
+        margin: 0 2px;
+        padding: 0.35em 0.625em 0.75em;
+      }
+      p {
+        margin: 0;
+      }
+      a {
+        text-decoration: none;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        grid-gap: 120px;
+        gap: 120px;
+        height: 89vh;
+      }
+      .logo img {
+        height: 128px;
+      }
+      footer {
+        position: fixed;
+        bottom: 0;
+        padding-bottom: calc(30px + env(safe-area-inset-bottom));
+        grid-gap: 8px;
+        gap: 8px;
+        width: 100vw;
+        font-size: 10px;
+        color: rgba(0, 0, 0, 0.45);
+        line-height: 12px;
+      }
+      .download-container,
+      footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .download-container {
+        grid-gap: 16px;
+        gap: 16px;
+      }
+      .button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        width: 297px;
+        height: 48px;
+        border-radius: 999px;
+        font-size: 16px;
+        font-weight: 500;
+        border: none;
+      }
+      .download-container #not-in-browser {
+        display: none;
+        font-size: 14px;
+        line-height: 18px;
+        color: rgba(0, 0, 0, 0.62);
+      }
+      .download-container #in-browser {
+        display: none;
+        color: #ff2442;
+        border: 1px solid #ff2442;
+        background: transparent;
+      }
+      .download-button {
+        background: #ff2442;
+        color: #fff;
+      }
+      footer a {
+        color: #3d8af5;
+        font-style: normal;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="others">
+      <div class="logo">
+        <img
+          src="https://picasso-static.xiaohongshu.com/fe-platform/209095b1bd0330f15e7cdf22e54ff8377971b917.png"
+          alt="小红书 - 你的生活指南 Logo"
+        />
+      </div>
+      <div class="download-container">
+        <button class="download-button button" id="download_btn" type="button">
+          下载小红书 App
+        </button>
+        <p id="not-in-browser">已下载？点击右上角，在浏览器中打开</p>
+        <a href="/" id="in-browser" class="button">直接在 App 内打开</a>
+      </div>
+    </div>
+    <footer>
+      <p id="oia_info_author">开发者：行吟信息科技（上海）有限公司</p>
+      <p>
+        <a href="https://www.xiaohongshu.com/mobile/permission" id="permission"
+          >应用权限 </a
+        >|
+        <a
+          href="https://agree.xiaohongshu.com/h5/terms/ZXXY20220509001/-1"
+          id="privacy"
+          >隐私政策</a
+        >
+        |
+        <a
+          href="https://www.xiaohongshu.com/activity/advertise/production"
+          id="product"
+          >产品功能</a
+        >
+      </p>
+      <p>
+        <span id="versionText">小红书 App 应用版本：</span
+        ><span id="version">8.23.1</span>
+        <span id="updateTimeText">应用更新时间：</span
+        ><span id="updateDate">2024-01-23</span>
+      </p>
+    </footer>
+  </body>
+</html>
