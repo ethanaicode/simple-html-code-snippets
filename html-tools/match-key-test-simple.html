@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>JSON Key 测试</title>
+    <style>
+        body {
+            font-family: Consolas, monospace;
+            padding: 20px;
+            line-height: 1.8;
+        }
+        .item {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>JSON Key 测试</h2>
+
+<div id="result"></div>
+
+<script>
+const json = {
+    "^.{0,30}(?:hao123\\.com|2345\\.com|xn\-\-dpq6\\.com)": [
+        {
+            u: "xxx"
+        }
+    ]
+};
+
+const div = document.getElementById("result");
+
+for (const key in json) {
+
+    div.innerHTML += "<div class='item'>";
+    div.innerHTML += "<b>key：</b>" + key + "<br>";
+
+    div.innerHTML += "<b>JSON.stringify(key)：</b>" + JSON.stringify(key) + "<br>";
+
+    div.innerHTML += "<b>字符串长度：</b>" + key.length + "<br>";
+
+    div.innerHTML += "<b>第一个反斜杠的位置：</b>" + key.indexOf("\\") + "<br>";
+
+    const url1 = "https://hao123.com.cn/";
+    const url2 = "https://2345.com.cn/";
+    const url3 = "https://google.com/";
+    const url4 = "https://2345dcom/";
+
+    div.innerHTML += "<hr>";
+    div.innerHTML += "<b>测试：</b><br>";
+
+    div.innerHTML += url1 + " → " + (url1.match(key) ? "✅ 匹配成功" : "❌ 不匹配") + "<br>";
+    div.innerHTML += url2 + " → " + (url2.match(key) ? "✅ 匹配成功" : "❌ 不匹配") + "<br>";
+    div.innerHTML += url3 + " → " + (url3.match(key) ? "✅ 匹配成功" : "❌ 不匹配") + "<br>";
+    div.innerHTML += url4 + " → " + (url4.match(key) ? "✅ 匹配成功" : "❌ 不匹配") + "<br>";
+
+    div.innerHTML += "</div>";
+}
+</script>
+
+</body>
+</html>

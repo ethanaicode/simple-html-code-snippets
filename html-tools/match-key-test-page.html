@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>window.location.href.match(key) 测试</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.18), transparent 28%),
+          linear-gradient(135deg, #101828 0%, #1d4ed8 48%, #8b5cf6 100%);
+        color: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+
+      .shell {
+        width: min(1080px, 100%);
+        background: rgba(15, 23, 42, 0.88);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 24px;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(14px);
+        padding: 28px;
+      }
+
+      .header {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 22px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.5rem, 3vw, 2.4rem);
+        line-height: 1.1;
+      }
+
+      .subtext {
+        margin: 0;
+        color: #cbd5e1;
+        line-height: 1.7;
+      }
+
+      .panel {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 18px;
+        padding: 18px;
+      }
+
+      label {
+        display: block;
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 8px;
+      }
+
+      input,
+      textarea,
+      button {
+        font: inherit;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        color: #f8fafc;
+        background: rgba(2, 6, 23, 0.7);
+        border: 1px solid rgba(148, 163, 184, 0.32);
+        border-radius: 14px;
+        outline: none;
+        padding: 14px 16px;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      textarea {
+        min-height: 180px;
+        resize: vertical;
+      }
+
+      input:focus,
+      textarea:focus {
+        border-color: #93c5fd;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      button {
+        border: 0;
+        border-radius: 14px;
+        padding: 12px 16px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .primary {
+        background: linear-gradient(135deg, #38bdf8, #a855f7);
+        color: white;
+      }
+
+      .ghost {
+        background: rgba(255, 255, 255, 0.08);
+        color: #e2e8f0;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .meta {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-top: 16px;
+      }
+
+      .stat {
+        padding: 14px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .stat .name {
+        display: block;
+        font-size: 0.8rem;
+        color: #94a3b8;
+        margin-bottom: 6px;
+      }
+
+      .stat .value {
+        display: block;
+        word-break: break-all;
+        font-weight: 700;
+        color: #f8fafc;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+        overflow: hidden;
+        border-radius: 16px;
+      }
+
+      th,
+      td {
+        text-align: left;
+        vertical-align: top;
+        padding: 12px 14px;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+      }
+
+      th {
+        background: rgba(255, 255, 255, 0.08);
+        color: #f8fafc;
+        font-size: 0.92rem;
+      }
+
+      td code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        color: #c4b5fd;
+      }
+
+      .pass {
+        color: #86efac;
+        font-weight: 700;
+      }
+
+      .fail {
+        color: #fca5a5;
+        font-weight: 700;
+      }
+
+      .notes {
+        margin-top: 18px;
+        color: #cbd5e1;
+        line-height: 1.7;
+      }
+
+      .notes code {
+        color: #f9a8d4;
+      }
+
+      @media (max-width: 840px) {
+        .panel,
+        .meta {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 14px;
+        }
+
+        .shell {
+          padding: 18px;
+          border-radius: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="header">
+        <h1>window.location.href.match(key) 测试页</h1>
+        <p class="subtext">
+          这里把 <code>window.location.href</code> 抽成一个可自定义值，方便验证
+          key 是字符串、正则，还是其他写法才会匹配。
+        </p>
+      </section>
+
+      <section class="panel">
+        <div class="card">
+          <label for="hrefInput">自定义 href</label>
+          <textarea id="hrefInput"></textarea>
+
+          <div class="toolbar">
+            <button class="primary" id="runBtn">运行测试</button>
+            <button class="ghost" id="resetBtn" type="button">恢复默认示例</button>
+          </div>
+
+          <div class="meta">
+            <div class="stat">
+              <span class="name">当前 href</span>
+              <span class="value" id="currentHref"></span>
+            </div>
+            <div class="stat">
+              <span class="name">匹配 key</span>
+              <span class="value" id="currentKey"></span>
+            </div>
+            <div class="stat">
+              <span class="name">结果</span>
+              <span class="value" id="currentResult"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <label for="keyInput">测试 key</label>
+          <input id="keyInput" type="text" />
+
+          <label for="casesInput" style="margin-top: 14px">批量测试 keys</label>
+          <textarea id="casesInput"></textarea>
+        </div>
+      </section>
+
+      <section class="card" style="margin-top: 16px">
+        <label>测试结果</label>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 18%">key</th>
+              <th style="width: 18%">类型</th>
+              <th style="width: 18%">match 返回值</th>
+              <th style="width: 18%">是否命中</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody id="resultBody"></tbody>
+        </table>
+
+        <p class="notes">
+          说明：<code>String.prototype.match</code> 既可以接收字符串，也可以接收正则。
+          传字符串时会先转成 <code>new RegExp(key)</code>，所以像 <code>/</code>、<code>.</code>、<code>?</code>
+          这类字符会参与正则语义。传 <code>RegExp</code> 时则按正则规则匹配。
+        </p>
+      </section>
+    </main>
+
+    <script>
+      const defaultHref = "https://www.example.com/solo-html-page/link-tree/index.html?from=demo#top";
+      const defaultKey = "link-tree";
+      const defaultCases = [
+        "link-tree",
+        "solo-html-page",
+        "index\\.html",
+        "example\\.com",
+        "^https://www\\.example\\.com/solo-html-page/link-tree",
+        /link-tree/i,
+        /from=demo/,
+        /not-exist/,
+      ];
+
+      const hrefInput = document.getElementById("hrefInput");
+      const keyInput = document.getElementById("keyInput");
+      const casesInput = document.getElementById("casesInput");
+      const resultBody = document.getElementById("resultBody");
+      const currentHref = document.getElementById("currentHref");
+      const currentKey = document.getElementById("currentKey");
+      const currentResult = document.getElementById("currentResult");
+
+      function serializeCaseEntry(entry) {
+        if (entry instanceof RegExp) {
+          return entry.toString();
+        }
+
+        const text = String(entry).trim();
+        if (!text) {
+          return "";
+        }
+
+        if (text.startsWith("/") && text.lastIndexOf("/") > 0) {
+          const lastSlash = text.lastIndexOf("/");
+          const pattern = text.slice(1, lastSlash);
+          const flags = text.slice(lastSlash + 1);
+
+          try {
+            return new RegExp(pattern, flags).toString();
+          } catch (error) {
+            return text;
+          }
+        }
+
+        return text;
+      }
+
+      function parseCaseEntry(text) {
+        const value = text.trim();
+        if (!value) {
+          return null;
+        }
+
+        if (value.startsWith("/") && value.lastIndexOf("/") > 0) {
+          const lastSlash = value.lastIndexOf("/");
+          const pattern = value.slice(1, lastSlash);
+          const flags = value.slice(lastSlash + 1);
+
+          try {
+            return new RegExp(pattern, flags);
+          } catch (error) {
+            return value;
+          }
+        }
+
+        return value;
+      }
+
+      function formatMatchResult(result) {
+        if (result === null) {
+          return "null";
+        }
+
+        if (typeof result === "object") {
+          return JSON.stringify(result[0]);
+        }
+
+        return JSON.stringify(result);
+      }
+
+      function evaluateMatch(href, key) {
+        let result = null;
+
+        try {
+          result = href.match(key);
+        } catch (error) {
+          return {
+            type: key instanceof RegExp ? "RegExp" : typeof key,
+            resultText: `错误: ${error.message}`,
+            matched: false,
+            note: "match 调用失败",
+          };
+        }
+
+        return {
+          type: key instanceof RegExp ? "RegExp" : typeof key,
+          resultText: formatMatchResult(result),
+          matched: Boolean(result),
+          note: key instanceof RegExp
+            ? "按正则规则匹配"
+            : "字符串会被转成 RegExp(key)",
+        };
+      }
+
+      function render() {
+        const href = hrefInput.value.trim();
+        const key = parseCaseEntry(keyInput.value);
+        const caseList = casesInput.value
+          .split("\n")
+          .map(parseCaseEntry)
+          .filter(Boolean);
+
+        currentHref.textContent = href;
+        currentKey.textContent = key instanceof RegExp ? key.toString() : String(key ?? "");
+
+        const mainResult = key ? evaluateMatch(href, key) : {
+          resultText: "未填写",
+          matched: false,
+        };
+        currentResult.textContent = mainResult.resultText;
+
+        resultBody.innerHTML = [key, ...caseList]
+          .filter(Boolean)
+          .map((item, index) => {
+            const info = evaluateMatch(href, item);
+            const label = index === 0 ? "当前 key" : `case ${index}`;
+            return `
+              <tr>
+                <td><code>${serializeCaseEntry(item)}</code></td>
+                <td>${info.type}</td>
+                <td><code>${info.resultText}</code></td>
+                <td class="${info.matched ? "pass" : "fail"}">${info.matched ? "true" : "false"}</td>
+                <td>${label} · ${info.note}</td>
+              </tr>
+            `;
+          })
+          .join("");
+      }
+
+      function loadDefaults() {
+        hrefInput.value = defaultHref;
+        keyInput.value = defaultKey;
+        casesInput.value = defaultCases.map(serializeCaseEntry).join("\n");
+        render();
+      }
+
+      document.getElementById("runBtn").addEventListener("click", render);
+      document.getElementById("resetBtn").addEventListener("click", loadDefaults);
+      hrefInput.addEventListener("input", render);
+      keyInput.addEventListener("input", render);
+      casesInput.addEventListener("input", render);
+
+      loadDefaults();
+    </script>
+  </body>
+</html>
